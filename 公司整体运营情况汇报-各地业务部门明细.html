@@ -8,7 +8,8 @@
         // 获取URL参数中的公司名称
         function getCompanyName() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('company') || '北京分公司';
+            // return urlParams.get('company') || '北京分公司';
+            return 'XX分公司';
         }
         
         // 设置页面标题
@@ -16,7 +17,7 @@
             const companyName = getCompanyName();
             document.title = `${companyName}总体概览`;
             document.querySelector('h1').textContent = `${companyName}总体概览`;
-            document.querySelector('.subtitle').textContent = `${companyName} · 监控画面 · 人员工作日报`;
+            document.querySelector('.subtitle').textContent = `监控画面 · 人员工作日报`;
         });
     </script>
     <style>

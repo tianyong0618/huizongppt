@@ -122,8 +122,7 @@
             <div class="chart-section">
                 <h2>公司列表</h2>
                 <div class="chart-tabs">
-                    <button class="tab-btn active" data-type="revenue">收入</button>
-                    <button class="tab-btn" data-type="cost">成本</button>
+                    <button class="tab-btn active" data-type="revenue-cost">收入/成本</button>
                     <button class="tab-btn" data-type="people">人数</button>
                 </div>
                 <div id="companyList" class="chart"></div>
@@ -190,74 +189,118 @@
         const companyList = echarts.init(document.getElementById('companyList'));
         
         function updateCompanyList(type) {
-            let dataKey, name, unit, max;
-            
-            switch(type) {
-                case 'revenue':
-                    dataKey = 'revenue';
-                    name = '收入';
-                    unit = '万元';
-                    max = 5500000;
-                    break;
-                case 'cost':
-                    dataKey = 'cost';
-                    name = '成本';
-                    unit = '万元';
-                    max = 3500000;
-                    break;
-                case 'people':
-                    dataKey = 'employees';
-                    name = '人数';
-                    unit = '人';
-                    max = 550;
-                    break;
-            }
-            
-            companyList.setOption({
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: { type: 'shadow' },
-                    formatter: function(params) {
-                        return params[0].name + ': ' + (params[0].value / (type === 'revenue' || type === 'cost' ? 10000 : 1)) + unit;
-                    }
-                },
-                grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-                xAxis: { 
-                    type: 'value',
-                    max: max,
-                    axisLabel: {
-                        formatter: function(value) {
-                            return (value / (type === 'revenue' || type === 'cost' ? 10000 : 1)) + unit;
-                        }
-                    }
-                },
-                yAxis: {
-                    type: 'category',
-                    data: companyListData.map(item => item.name)
-                },
-                series: [{
-                    name: name,
-                    type: 'bar',
-                    data: companyListData.map(item => item[dataKey]),
-                    itemStyle: {
-                        color: function(params) {
-                            const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#60c0dd'];
-                            return colors[params.dataIndex % colors.length];
+            if (type === 'revenue-cost') {
+                // 收入和成本同时显示
+                companyList.setOption({
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { type: 'shadow' },
+                        formatter: function(params) {
+                            let result = params[0].name + '<br/>';
+                            params.forEach(param => {
+                                result += param.seriesName + ': ' + (param.value / 10000) + '万元<br/>';
+                            });
+                            return result;
                         }
                     },
-                    label: {
-                        show: true,
-                        position: 'right',
-                        formatter: function(params) {
-                            return (params.value / (type === 'revenue' || type === 'cost' ? 10000 : 1)) + unit;
+                    legend: {
+                        data: ['收入', '成本'],
+                        top: 0
+                    },
+                    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                    xAxis: { 
+                        type: 'value',
+                        max: 5500000,
+                        axisLabel: {
+                            formatter: function(value) {
+                                return (value / 10000) + '万元';
+                            }
                         }
-                    }
-                }]
-            });
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: companyListData.map(item => item.name)
+                    },
+                    series: [
+                        {
+                            name: '收入',
+                            type: 'bar',
+                            data: companyListData.map(item => item.revenue),
+                            itemStyle: { color: '#5470c6' },
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: function(params) {
+                                    return (params.value / 10000) + '万';
+                                }
+                            }
+                        },
+                        {
+                            name: '成本',
+                            type: 'bar',
+                            data: companyListData.map(item => item.cost),
+                            itemStyle: { color: '#ee6666' },
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: function(params) {
+                                    return (params.value / 10000) + '万';
+                                }
+                            }
+                        }
+                    ]
+                }, true); // 添加true参数，强制替换所有配置
+            } else if (type === 'people') {
+                // 人数单独显示
+                companyList.setOption({
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { type: 'shadow' },
+                        formatter: function(params) {
+                            return params[0].name + ': ' + params[0].value + '人';
+                        }
+                    },
+                    legend: {
+                        show: false // 隐藏图例
+                    },
+                    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                    xAxis: { 
+                        type: 'value',
+                        max: 550,
+                        axisLabel: {
+                            formatter: function(value) {
+                                return value + '人';
+                            }
+                        }
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: companyListData.map(item => item.name)
+                    },
+                    series: [{
+                        name: '人数',
+                        type: 'bar',
+                        data: companyListData.map(item => item.employees),
+                        itemStyle: {
+                            color: function(params) {
+                                const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#60c0dd'];
+                                return colors[params.dataIndex % colors.length];
+                            }
+                        },
+                        label: {
+                            show: true,
+                            position: 'right',
+                            formatter: function(params) {
+                                return params.value + '人';
+                            }
+                        }
+                    }]
+                }, true); // 添加true参数，强制替换所有配置
+            }
         }
         
         // 初始化图表
-        updateCompanyList('revenue');
+        updateCompanyList('revenue-cost');
         
         // 标签点击事件
         document.querySelectorAll('.tab-btn').forEach(btn => {
