@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>各公司业务明细</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .back-link {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        
+        .back-link a {
+            color: #2a5298;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .monitoring-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .monitoring-section h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 250px);
+            grid-template-rows: 150px;
+            gap: 10px;
+            max-height: 170px;
+            overflow-x: auto;
+            padding: 10px;
+        }
+        
+        .monitoring-item {
+            background: #e9ecef;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #dee2e6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .monitoring-item .camera-id {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .monitoring-item .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #28a745;
+        }
+        
+        .monitoring-item .status.offline {
+            background: #dc3545;
+        }
+        
+        .monitoring-item .camera-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .monitoring-item .location {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .personnel-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .personnel-section h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .personnel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .personnel-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 70px 1fr 120px;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .personnel-item .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .personnel-item .info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .personnel-item .name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+        
+        .personnel-item .report {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .personnel-item .progress {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        
+        .personnel-item .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .personnel-item .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+        
+        .personnel-item .progress-text {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="back-link">
+                <a href="公司整体运营情况汇报-各地业务部门概览.html">&larr; 返回公司列表</a>
+            </div>
+            <h1>各公司业务明细</h1>
+            <p class="subtitle">监控画面 · 人员工作日报</p>
+        </div>
+        
+        <div class="content">
+            <!-- 监控画面 -->
+            <div class="monitoring-section">
+                <h2>监控画面</h2>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="camera-id">摄像头 001</div>
+                        <div class="status"></div>
+                        <div class="camera-image" style="background: none;"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=security%20camera%20monitoring%20office%20lobby%20with%20people%20moving&image_size=square" alt="总部大厅" style="width: 100%; height: 100%; border-radius: 6px; object-fit: cover;"></div>
+
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="camera-id">摄像头 002</div>
+                        <div class="status"></div>
+                        <div class="camera-image" style="background: none;"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=security%20camera%20view%20of%20office%20interior%20with%20workstations&image_size=square" alt="北京分公司" style="width: 100%; height: 100%; border-radius: 6px; object-fit: cover;"></div>
+
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="camera-id">摄像头 003</div>
+                        <div class="status"></div>
+                        <div class="camera-image" style="background: none;"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=security%20camera%20view%20of%20modern%20office%20with%20glass%20partitions&image_size=square" alt="上海分公司" style="width: 100%; height: 100%; border-radius: 6px; object-fit: cover;"></div>
+
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="camera-id">摄像头 004</div>
+                        <div class="status"></div>
+                        <div class="camera-image" style="background: none;"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=security%20camera%20view%20of%20office%20reception%20area&image_size=square" alt="广州分公司" style="width: 100%; height: 100%; border-radius: 6px; object-fit: cover;"></div>
+
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="camera-id">摄像头 005</div>
+                        <div class="status"></div>
+                        <div class="camera-image" style="background: none;"><img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=security%20camera%20view%20of%20tech%20company%20office%20workstations&image_size=square" alt="深圳分公司" style="width: 100%; height: 100%; border-radius: 6px; object-fit: cover;"></div>
+
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 人员列表 -->
+            <div class="personnel-section">
+                <h2>人员工作日报</h2>
+                <div class="personnel-list">
+                    <div class="personnel-item">
+                        <div class="avatar" style="background: none; width: 70px; height: 70px; border-radius: 50%; overflow: hidden;"><img src="https://randomuser.me/api/portraits/men/1.jpg" alt="张伟" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="info">
+                            <div class="name">张伟 - 前端工程师</div>
+                            <div class="report">今日完成了公司官网首页的改版，修复了响应式布局问题，优化了页面加载速度。</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                            <div class="progress-text">100%</div>
+                        </div>
+                    </div>
+                    <div class="personnel-item">
+                        <div class="avatar" style="background: none; width: 70px; height: 70px; border-radius: 50%; overflow: hidden;"><img src="https://randomuser.me/api/portraits/women/1.jpg" alt="李娜" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="info">
+                            <div class="name">李娜 - 讲师</div>
+                            <div class="report">今日完成了新员工培训课程的准备，进行了3场技术培训，解答了学员的问题。</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <div class="progress-text">85%</div>
+                        </div>
+                    </div>
+                    <div class="personnel-item">
+                        <div class="avatar" style="background: none; width: 70px; height: 70px; border-radius: 50%; overflow: hidden;"><img src="https://randomuser.me/api/portraits/men/2.jpg" alt="王强" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="info">
+                            <div class="name">王强 - 运维工程师</div>
+                            <div class="report">今日完成了服务器的日常维护，处理了2个系统故障，优化了数据库性能。</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                            <div class="progress-text">90%</div>
+                        </div>
+                    </div>
+                    <div class="personnel-item">
+                        <div class="avatar" style="background: none; width: 70px; height: 70px; border-radius: 50%; overflow: hidden;"><img src="https://randomuser.me/api/portraits/women/2.jpg" alt="赵敏" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="info">
+                            <div class="name">赵敏 - Java工程师</div>
+                            <div class="report">今日完成了后端API的开发，修复了3个bug，优化了代码结构。</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <div class="progress-text">75%</div>
+                        </div>
+                    </div>
+                    <div class="personnel-item">
+                        <div class="avatar" style="background: none; width: 70px; height: 70px; border-radius: 50%; overflow: hidden;"><img src="https://randomuser.me/api/portraits/men/3.jpg" alt="钱伟" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                        <div class="info">
+                            <div class="name">钱伟 - 测试工程师</div>
+                            <div class="report">今日完成了新功能的测试，编写了测试用例，提交了2个bug报告。</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                            <div class="progress-text">80%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

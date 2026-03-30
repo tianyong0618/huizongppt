@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品研发进展</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2a5298;
+        }
+        .header h1 { font-size: 32px; color: #1e3c72; margin-bottom: 10px; }
+        .header .subtitle { font-size: 16px; color: #666; }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .chart-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .chart-section h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        .chart { width: 100%; height: 350px; }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .summary-card h4 { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .summary-card .value { font-size: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>产品研发进展</h1>
+            <p class="subtitle">6个软件项目 · 5个产品 · 总投入320万元</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="chart-section">
+                <h2>项目研发进度</h2>
+                <div id="projectChart" class="chart"></div>
+            </div>
+            <div class="chart-section">
+                <h2>产品研发进度</h2>
+                <div id="productChart" class="chart"></div>
+            </div>
+            <div class="chart-section">
+                <h2>研发总投入构成</h2>
+                <div id="investmentChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h4>研发总投入</h4>
+                <div class="value">320万元</div>
+            </div>
+            <div class="summary-card">
+                <h4>人员投入</h4>
+                <div class="value">85人</div>
+            </div>
+            <div class="summary-card">
+                <h4>专利申请</h4>
+                <div class="value">12项</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 项目进度图表
+        const projectChart = echarts.init(document.getElementById('projectChart'));
+        projectChart.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%' } },
+            yAxis: { type: 'category', data: ['济南', '南阳', '西宁', '庆阳', '宜昌', '滁州'] },
+            series: [{
+                name: '完成进度',
+                type: 'bar',
+                data: [
+                    {value: 82, itemStyle: {color: '#5470c6'}},
+                    {value: 75, itemStyle: {color: '#91cc75'}},
+                    {value: 68, itemStyle: {color: '#fac858'}},
+                    {value: 72, itemStyle: {color: '#ee6666'}},
+                    {value: 85, itemStyle: {color: '#73c0de'}},
+                    {value: 90, itemStyle: {color: '#3ba272'}}
+                ],
+                label: { show: true, position: 'right', formatter: '{c}%' }
+            }]
+        });
+
+        // 产品完成度图表
+        const productChart = echarts.init(document.getElementById('productChart'));
+        productChart.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+            legend: { orient: 'vertical', left: 'left', top: 'center' },
+            series: [{
+                name: '完成度',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['60%', '50%'],
+                avoidLabelOverlap: false,
+                itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+                label: { show: true, formatter: '{b}\n{c}%' },
+                data: [
+                    {value: 89, name: '点建', itemStyle: {color: '#5470c6'}},
+                    {value: 85, name: '市场营销', itemStyle: {color: '#91cc75'}},
+                    {value: 55, name: '超级个体', itemStyle: {color: '#fac858'}},
+                    {value: 55, name: '就业实训', itemStyle: {color: '#ee6666'}},
+                    {value: 55, name: '创业实训', itemStyle: {color: '#73c0de'}}
+                ]
+            }]
+        });
+
+        // 投入构成图表
+        const investmentChart = echarts.init(document.getElementById('investmentChart'));
+        investmentChart.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}万元 ({d}%)' },
+            legend: { bottom: '5%' },
+            series: [{
+                name: '投入构成',
+                type: 'pie',
+                radius: '60%',
+                data: [
+                    {value: 150, name: '人力成本', itemStyle: {color: '#5470c6'}},
+                    {value: 80, name: '设备采购', itemStyle: {color: '#91cc75'}},
+                    {value: 50, name: '技术外包', itemStyle: {color: '#fac858'}},
+                    {value: 40, name: '其他支出', itemStyle: {color: '#ee6666'}}
+                ],
+                emphasis: {
+                    itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
+                }
+            }]
+        });
+
+
+
+        window.addEventListener('resize', function() {
+            projectChart.resize();
+            productChart.resize();
+            investmentChart.resize();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>各地业务部门概览</title>
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 引入中国地图 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-section h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .chart {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>各地业务部门概览</h1>
+            <p class="subtitle">总部及各地分公司 · 业务增长分析</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- 公司分布地图 -->
+            <div class="chart-section">
+                <h2>全国公司分布</h2>
+                <div id="companyMap" class="chart"></div>
+            </div>
+            
+            <!-- 公司列表 -->
+            <div class="chart-section">
+                <h2>公司列表</h2>
+                <div id="companyList" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 公司分布地图
+        const companyMap = echarts.init(document.getElementById('companyMap'));
+        const companyData = [
+            {name: '北京', value: 100, employees: 120, revenue: 1200000, company: '北京分公司'},
+            {name: '上海', value: 92, employees: 100, revenue: 1000000, company: '上海分公司'},
+            {name: '广东', value: 90, employees: 170, revenue: 1700000, company: '广州分公司、深圳分公司'},
+            {name: '四川', value: 82, employees: 70, revenue: 700000, company: '成都分公司'},
+            {name: '湖北', value: 78, employees: 60, revenue: 600000, company: '武汉分公司'},
+            {name: '陕西', value: 75, employees: 50, revenue: 500000, company: '西安分公司'},
+            {name: '江苏', value: 72, employees: 45, revenue: 450000, company: '南京分公司'},
+            {name: '重庆', value: 70, employees: 40, revenue: 400000, company: '重庆分公司'}
+        ];
+        
+        companyMap.setOption({
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: {c}'
+            },
+            visualMap: {
+                min: 0, max: 100, left: 'left', top: 'bottom',
+                text: ['高', '低'], calculable: true,
+                inRange: { color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695'] }
+            },
+            series: [{
+                name: '公司分布',
+                type: 'map',
+                map: 'china',
+                roam: true,
+                emphasis: { label: { show: true }, itemStyle: { areaColor: '#ffd700' } },
+                data: companyData
+            }]
+        });
+        
+
+        
+        // 添加点击事件，跳转到业务管理分析页面（作为各公司业务明细页）
+        companyMap.on('click', function(params) {
+            window.location.href = '公司整体运营情况汇报-业务管理分析.html';
+        });
+
+        // 公司列表
+        const companyList = echarts.init(document.getElementById('companyList'));
+        const companyListData = [
+            {name: '总部', value: 100, employees: 500, revenue: 5000000},
+            {name: '北京分公司', value: 95, employees: 120, revenue: 1200000},
+            {name: '上海分公司', value: 92, employees: 100, revenue: 1000000},
+            {name: '广州分公司', value: 88, employees: 90, revenue: 900000},
+            {name: '深圳分公司', value: 85, employees: 80, revenue: 800000},
+            {name: '成都分公司', value: 82, employees: 70, revenue: 700000},
+            {name: '武汉分公司', value: 78, employees: 60, revenue: 600000},
+            {name: '西安分公司', value: 75, employees: 50, revenue: 500000},
+            {name: '南京分公司', value: 72, employees: 45, revenue: 450000},
+            {name: '重庆分公司', value: 70, employees: 40, revenue: 400000}
+        ];
+        
+        companyList.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' }
+            },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'value' },
+            yAxis: {
+                type: 'category',
+                data: companyListData.map(item => item.name)
+            },
+            series: [{
+                name: '业务活跃度',
+                type: 'bar',
+                data: companyListData.map(item => item.value),
+                itemStyle: {
+                    color: function(params) {
+                        const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#60c0dd'];
+                        return colors[params.dataIndex % colors.length];
+                    }
+                },
+                label: { show: true, position: 'right' }
+            }]
+        });
+        
+        // 添加点击事件，跳转到业务管理分析页面（作为各公司业务明细页）
+        companyList.on('click', function(params) {
+            window.location.href = '公司整体运营情况汇报-业务管理分析.html';
+        });
+
+        // 响应式调整
+        window.addEventListener('resize', function() {
+            companyMap.resize();
+            companyList.resize();
+        });
+    </script>
+</body>
+</html>

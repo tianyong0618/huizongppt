@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>培训业务情况</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2a5298;
+        }
+        .header h1 { font-size: 32px; color: #1e3c72; margin-bottom: 10px; }
+        .header .subtitle { font-size: 16px; color: #666; }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .chart-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .chart-section h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        .chart { width: 100%; height: 350px; }
+        .bottom-chart {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .bottom-chart h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .summary-card h4 { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .summary-card .value { font-size: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>培训业务情况</h1>
+            <p class="subtitle">4类培训项目 · 月度收入420万元 · 同比增长32%</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="chart-section">
+                <h2>培训项目人次分布</h2>
+                <div id="trainingChart" class="chart"></div>
+            </div>
+            <div class="chart-section">
+                <h2>培训效果指标</h2>
+                <div id="effectChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div class="bottom-chart">
+            <h2>月度培训收入趋势</h2>
+            <div id="revenueChart" style="width: 100%; height: 400px;"></div>
+        </div>
+        
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h4>培训总人次</h4>
+                <div class="value">12,700人次</div>
+            </div>
+            <div class="summary-card">
+                <h4>月度收入</h4>
+                <div class="value">420万元</div>
+            </div>
+            <div class="summary-card">
+                <h4>同比增长</h4>
+                <div class="value">32%</div>
+            </div>
+            <div class="summary-card">
+                <h4>重点客户</h4>
+                <div class="value">85家</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 培训人次图表
+        const trainingChart = echarts.init(document.getElementById('trainingChart'));
+        trainingChart.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { 
+                type: 'category', 
+                data: ['就业培训', '创业培训', '技能提升', '管理培训'],
+                axisLabel: { fontSize: 12 }
+            },
+            yAxis: { type: 'value', name: '人次' },
+            series: [{
+                name: '培训人次',
+                type: 'bar',
+                data: [
+                    {value: 5200, itemStyle: {color: '#5470c6'}},
+                    {value: 2800, itemStyle: {color: '#91cc75'}},
+                    {value: 3500, itemStyle: {color: '#fac858'}},
+                    {value: 1200, itemStyle: {color: '#ee6666'}}
+                ],
+                label: { show: true, position: 'top', formatter: '{c}人次' },
+                barWidth: '60%'
+            }]
+        });
+
+        // 培训效果雷达图
+        const effectChart = echarts.init(document.getElementById('effectChart'));
+        effectChart.setOption({
+            tooltip: {},
+            radar: {
+                indicator: [
+                    { name: '培训满意度', max: 100 },
+                    { name: '就业转化率', max: 100 },
+                    { name: '创业成功率', max: 100 },
+                    { name: '技能提升率', max: 100 }
+                ],
+                center: ['50%', '55%'],
+                radius: '65%'
+            },
+            series: [{
+                name: '培训效果',
+                type: 'radar',
+                data: [{
+                    value: [92, 48, 35, 85],
+                    name: '实际指标',
+                    areaStyle: { color: 'rgba(84, 112, 198, 0.3)' },
+                    lineStyle: { color: '#5470c6', width: 2 },
+                    itemStyle: { color: '#5470c6' }
+                }],
+                label: { show: true, formatter: '{c}%' }
+            }]
+        });
+
+        // 收入趋势图表
+        const revenueChart = echarts.init(document.getElementById('revenueChart'));
+        revenueChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'cross' }
+            },
+            legend: { data: ['培训收入', '收入增长率'], top: 10 },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                axisLabel: { fontSize: 11 }
+            },
+            yAxis: [
+                { type: 'value', name: '收入(万元)', position: 'left' },
+                { type: 'value', name: '增长率(%)', position: 'right', axisLabel: { formatter: '{value}%' } }
+            ],
+            series: [
+                {
+                    name: '培训收入',
+                    type: 'bar',
+                    data: [280, 295, 310, 325, 340, 355, 370, 385, 400, 410, 415, 420],
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#83bff6' },
+                            { offset: 0.5, color: '#188df0' },
+                            { offset: 1, color: '#188df0' }
+                        ])
+                    },
+                    label: { show: true, position: 'top', formatter: '{c}万' }
+                },
+                {
+                    name: '收入增长率',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [15, 18, 20, 22, 25, 28, 30, 31, 32, 32, 32, 32],
+                    itemStyle: { color: '#91cc75' },
+                    lineStyle: { width: 3 },
+                    smooth: true
+                }
+            ]
+        });
+
+        window.addEventListener('resize', function() {
+            trainingChart.resize();
+            effectChart.resize();
+            revenueChart.resize();
+        });
+    </script>
+</body>
+</html>

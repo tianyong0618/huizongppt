@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人力资源状况</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2a5298;
+        }
+        .header h1 { font-size: 32px; color: #1e3c72; margin-bottom: 10px; }
+        .header .subtitle { font-size: 16px; color: #666; }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .chart-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .chart-section h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #2a5298;
+        }
+        .chart { width: 100%; height: 350px; }
+        .bottom-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .summary-card h4 { font-size: 12px; opacity: 0.9; margin-bottom: 8px; }
+        .summary-card .value { font-size: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>人力资源状况</h1>
+            <p class="subtitle">总人数320人 · 本月招聘28人 · 培训35场</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="chart-section">
+                <h2>本月招聘情况</h2>
+                <div id="recruitChart" class="chart"></div>
+            </div>
+            <div class="chart-section">
+                <h2>内部培训情况</h2>
+                <div id="trainingChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div class="bottom-content">
+            <div class="chart-section">
+                <h2>部门人员分布</h2>
+                <div id="deptChart" class="chart"></div>
+            </div>
+            <div class="chart-section">
+                <h2>职级分布</h2>
+                <div id="levelChart" class="chart"></div>
+            </div>
+            <div class="chart-section">
+                <h2>年龄结构</h2>
+                <div id="ageChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h4>总人数</h4>
+                <div class="value">320人</div>
+            </div>
+            <div class="summary-card">
+                <h4>本月招聘</h4>
+                <div class="value">28人</div>
+            </div>
+            <div class="summary-card">
+                <h4>培训场次</h4>
+                <div class="value">35场</div>
+            </div>
+            <div class="summary-card">
+                <h4>录用率</h4>
+                <div class="value">68%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 招聘情况图表
+        const recruitChart = echarts.init(document.getElementById('recruitChart'));
+        recruitChart.setOption({
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['招聘人数', '录用率'], top: 10 },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'category', data: ['技术', '销售', '运营', '管理', '其他'] },
+            yAxis: [
+                { type: 'value', name: '人数', position: 'left' },
+                { type: 'value', name: '录用率(%)', position: 'right', max: 100 }
+            ],
+            series: [
+                {
+                    name: '招聘人数',
+                    type: 'bar',
+                    data: [12, 8, 5, 2, 1],
+                    itemStyle: { color: '#5470c6' },
+                    label: { show: true, position: 'top' }
+                },
+                {
+                    name: '录用率',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [72, 65, 70, 60, 75],
+                    itemStyle: { color: '#91cc75' },
+                    lineStyle: { width: 3 },
+                    label: { show: true, formatter: '{c}%', position: 'top' }
+                }
+            ]
+        });
+
+        // 培训情况图表
+        const trainingChart = echarts.init(document.getElementById('trainingChart'));
+        trainingChart.setOption({
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['培训场次', '培训人次'], top: 10 },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'category', data: ['1月', '2月', '3月', '4月', '5月', '6月'] },
+            yAxis: [
+                { type: 'value', name: '场次', position: 'left' },
+                { type: 'value', name: '人次', position: 'right' }
+            ],
+            series: [
+                {
+                    name: '培训场次',
+                    type: 'bar',
+                    data: [28, 30, 32, 33, 34, 35],
+                    itemStyle: { color: '#5470c6' }
+                },
+                {
+                    name: '培训人次',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [350, 365, 380, 395, 410, 420],
+                    itemStyle: { color: '#91cc75' },
+                    lineStyle: { width: 3 },
+                    smooth: true
+                }
+            ]
+        });
+
+        // 部门分布饼图
+        const deptChart = echarts.init(document.getElementById('deptChart'));
+        deptChart.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
+            series: [{
+                name: '部门分布',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+                label: { show: true, formatter: '{b}\n{c}人' },
+                data: [
+                    {value: 85, name: '技术部', itemStyle: {color: '#5470c6'}},
+                    {value: 65, name: '销售部', itemStyle: {color: '#91cc75'}},
+                    {value: 55, name: '运营部', itemStyle: {color: '#fac858'}},
+                    {value: 45, name: '市场部', itemStyle: {color: '#ee6666'}},
+                    {value: 35, name: '人事部', itemStyle: {color: '#73c0de'}},
+                    {value: 35, name: '其他', itemStyle: {color: '#3ba272'}}
+                ]
+            }]
+        });
+
+        // 职级分布
+        const levelChart = echarts.init(document.getElementById('levelChart'));
+        levelChart.setOption({
+            tooltip: { trigger: 'item', formatter: '{b}: {c}人 ({d}%)' },
+            series: [{
+                name: '职级分布',
+                type: 'pie',
+                radius: '65%',
+                data: [
+                    {value: 25, name: '高管', itemStyle: {color: '#5470c6'}},
+                    {value: 65, name: '中层管理', itemStyle: {color: '#91cc75'}},
+                    {value: 150, name: '基层员工', itemStyle: {color: '#fac858'}},
+                    {value: 80, name: '实习生', itemStyle: {color: '#ee6666'}}
+                ],
+                label: { formatter: '{b}\n{c}人 ({d}%)' },
+                emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' } }
+            }]
+        });
+
+        // 年龄结构
+        const ageChart = echarts.init(document.getElementById('ageChart'));
+        ageChart.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'category', data: ['20-25岁', '26-30岁', '31-35岁', '36-40岁', '40岁以上'] },
+            yAxis: { type: 'value', name: '人数' },
+            series: [{
+                name: '人数',
+                type: 'bar',
+                data: [
+                    {value: 75, itemStyle: {color: '#5470c6'}},
+                    {value: 120, itemStyle: {color: '#91cc75'}},
+                    {value: 65, itemStyle: {color: '#fac858'}},
+                    {value: 35, itemStyle: {color: '#ee6666'}},
+                    {value: 25, itemStyle: {color: '#73c0de'}}
+                ],
+                label: { show: true, position: 'top', formatter: '{c}人' },
+                barWidth: '60%'
+            }]
+        });
+
+        window.addEventListener('resize', function() {
+            recruitChart.resize();
+            trainingChart.resize();
+            deptChart.resize();
+            levelChart.resize();
+            ageChart.resize();
+        });
+    </script>
+</body>
+</html>
