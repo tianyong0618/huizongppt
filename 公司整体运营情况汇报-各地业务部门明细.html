@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>各地业务部门明细</title>
+    <title>公司总体概览</title>
+    <script>
+        // 获取URL参数中的公司名称
+        function getCompanyName() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('company') || '北京分公司';
+        }
+        
+        // 设置页面标题
+        document.addEventListener('DOMContentLoaded', function() {
+            const companyName = getCompanyName();
+            document.title = `${companyName}总体概览`;
+            document.querySelector('h1').textContent = `${companyName}总体概览`;
+            document.querySelector('.subtitle').textContent = `${companyName} · 监控画面 · 人员工作日报`;
+        });
+    </script>
     <style>
         * {
             margin: 0;
@@ -45,16 +60,7 @@
             color: #666;
         }
         
-        .back-link {
-            text-align: left;
-            margin-bottom: 15px;
-        }
-        
-        .back-link a {
-            color: #2a5298;
-            text-decoration: none;
-            font-size: 14px;
-        }
+
         
         .content {
             display: flex;
@@ -235,11 +241,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="back-link">
-                <a href="公司整体运营情况汇报-各地业务部门概览.html">&larr; 返回公司列表</a>
-            </div>
-            <h1>各地业务部门明细</h1>
-            <p class="subtitle">监控画面 · 人员工作日报</p>
+            <h1>公司总体概览</h1>
+            <p class="subtitle">公司 · 监控画面 · 人员工作日报</p>
         </div>
         
         <div class="content">

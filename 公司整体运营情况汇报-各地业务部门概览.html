@@ -169,7 +169,8 @@
         
         // 添加点击事件，跳转到各地业务部门明细页面
         companyMap.on('click', function(params) {
-            window.location.href = '公司整体运营情况汇报-各地业务部门明细.html';
+            const companyName = params.data.company;
+            window.location.href = `公司整体运营情况汇报-各地业务部门明细.html?company=${encodeURIComponent(companyName)}`;
         });
 
         // 公司列表数据
@@ -272,7 +273,8 @@
         
         // 添加点击事件，跳转到各地业务部门明细页面
         companyList.on('click', function(params) {
-            window.location.href = '公司整体运营情况汇报-各地业务部门明细.html';
+            const companyName = params.name;
+            window.location.href = `公司整体运营情况汇报-各地业务部门明细.html?company=${encodeURIComponent(companyName)}`;
         });
 
         // 响应式调整
