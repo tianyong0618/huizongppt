@@ -135,7 +135,7 @@
         // 公司分布地图
         const companyMap = echarts.init(document.getElementById('companyMap'));
         const companyData = [
-            {name: '北京', value: 100, employees: 120, revenue: 1200000, company: '北京分公司'},
+            {name: '北京', value: 100, employees: 500, revenue: 5000000, company: '总部'},
             {name: '上海', value: 92, employees: 100, revenue: 1000000, company: '上海分公司'},
             {name: '广东', value: 90, employees: 170, revenue: 1700000, company: '广州分公司、深圳分公司'},
             {name: '四川', value: 82, employees: 70, revenue: 700000, company: '成都分公司'},
@@ -167,15 +167,14 @@
         
 
         
-        // 添加点击事件，跳转到业务管理分析页面（作为各公司业务明细页）
+        // 添加点击事件，跳转到各地业务部门明细页面
         companyMap.on('click', function(params) {
-            window.location.href = '公司整体运营情况汇报-业务管理分析.html';
+            window.location.href = '公司整体运营情况汇报-各地业务部门明细.html';
         });
 
         // 公司列表数据
         const companyListData = [
             {name: '总部', value: 100, employees: 500, revenue: 5000000, cost: 3000000},
-            {name: '北京分公司', value: 95, employees: 120, revenue: 1200000, cost: 720000},
             {name: '上海分公司', value: 92, employees: 100, revenue: 1000000, cost: 600000},
             {name: '广州分公司', value: 88, employees: 90, revenue: 900000, cost: 540000},
             {name: '深圳分公司', value: 85, employees: 80, revenue: 800000, cost: 480000},
@@ -271,9 +270,9 @@
             });
         });
         
-        // 添加点击事件，跳转到业务管理分析页面（作为各公司业务明细页）
+        // 添加点击事件，跳转到各地业务部门明细页面
         companyList.on('click', function(params) {
-            window.location.href = '公司整体运营情况汇报-业务管理分析.html';
+            window.location.href = '公司整体运营情况汇报-各地业务部门明细.html';
         });
 
         // 响应式调整
