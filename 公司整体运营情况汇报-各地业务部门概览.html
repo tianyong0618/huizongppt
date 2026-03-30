@@ -144,28 +144,107 @@
             {name: '重庆', value: 70, employees: 40, revenue: 400000, company: '重庆分公司'}
         ];
         
+        // 中国各省份中心点坐标
+        const provinceCoords = {
+            '北京': [116.4074, 39.9042],
+            '上海': [121.4737, 31.2304],
+            '广东': [113.2644, 23.1291],
+            '四川': [104.0668, 30.5728],
+            '湖北': [114.3055, 30.5928],
+            '陕西': [108.9402, 34.3416],
+            '江苏': [118.7778, 32.0603],
+            '重庆': [106.5516, 29.5630]
+        };
+
+        // 转换数据为散点图格式
+        const scatterData = companyData.map(item => {
+            const coord = provinceCoords[item.name] || [0, 0];
+            return {
+                name: item.name,
+                value: [...coord, item.value],
+                company: item.company
+            };
+        });
+
         companyMap.setOption({
             tooltip: {
                 trigger: 'item',
-                formatter: '{b}: {c}'
+                formatter: function(params) {
+                    if (params.data) {
+                        // 查找对应的companyData数据获取收入
+                        const companyDataItem = companyData.find(item => item.name === params.name);
+                        // 尝试从companyListData中获取成本
+                        let cost = 'N/A';
+                        
+                        // 特殊处理广东，因为它对应广州和深圳分公司
+                        if (params.name === '广东') {
+                            // 查找广州分公司和深圳分公司的成本并相加
+                            const guangzhou = companyListData.find(item => item.name === '广州分公司');
+                            const shenzhen = companyListData.find(item => item.name === '深圳分公司');
+                            if (guangzhou && shenzhen) {
+                                cost = (guangzhou.cost + shenzhen.cost) / 10000;
+                            }
+                        } else {
+                            // 对于其他省份，尝试匹配分公司名称
+                            const listItem = companyListData.find(item => {
+                                return item.name.includes(params.data.company.replace('分公司', '')) || 
+                                       params.data.company.includes(item.name.replace('分公司', ''));
+                            });
+                            if (listItem) {
+                                cost = listItem.cost / 10000;
+                            }
+                        }
+                        
+                        if (companyDataItem) {
+                            return params.name + '<br/>' +
+                                   '公司: ' + params.data.company + '<br/>' +
+                                   '收入: ' + (companyDataItem.revenue / 10000) + '万元<br/>' +
+                                   '成本: ' + cost + '万元';
+                        } else {
+                            return params.name + '<br/>' +
+                                   '公司: ' + params.data.company;
+                        }
+                    }
+                    return params.name;
+                }
             },
-            visualMap: {
-                min: 0, max: 100, left: 'left', top: 'bottom',
-                text: ['高', '低'], calculable: true,
-                inRange: { color: ['#e0f3f8', '#abd9e9', '#74add1', '#4575b4', '#313695'] }
+            geo: {
+                map: 'china',
+                roam: true,
+                emphasis: {
+                    label: {
+                        show: true
+                    },
+                    itemStyle: {
+                        areaColor: '#ffd700'
+                    }
+                }
             },
             series: [{
                 name: '公司分布',
-                type: 'map',
-                map: 'china',
-                roam: true,
-                emphasis: { label: { show: true }, itemStyle: { areaColor: '#ffd700' } },
-                data: companyData
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: scatterData,
+                symbolSize: 15,
+                label: {
+                    show: true,
+                    formatter: '{b}',
+                    position: 'top'
+                }
             }]
         });
         
 
         
+        // 添加默认悬停北京
+        setTimeout(function() {
+            companyMap.dispatchAction({
+                type: 'showTip',
+                seriesIndex: 0,
+                dataIndex: scatterData.findIndex(item => item.name === '北京')
+            });
+        }, 500);
+
         // 添加点击事件，跳转到各地业务部门明细页面
         companyMap.on('click', function(params) {
             const companyName = params.data.company;
