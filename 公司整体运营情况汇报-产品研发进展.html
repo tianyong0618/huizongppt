@@ -72,7 +72,7 @@
     <div class="container">
         <div class="header">
             <h1>产品研发进展</h1>
-            <p class="subtitle">6个软件项目 · 5个产品 · 总投入320万元</p>
+            <p class="subtitle">6个软件项目 · 5个产品 · 项目收入3560万元</p>
         </div>
         
         <div class="main-content">
@@ -85,15 +85,15 @@
                 <div id="productChart" class="chart"></div>
             </div>
             <div class="chart-section">
-                <h2>研发总投入构成</h2>
+                <h2>项目收入构成</h2>
                 <div id="investmentChart" class="chart"></div>
             </div>
         </div>
         
         <div class="summary-cards">
             <div class="summary-card">
-                <h4>研发总投入</h4>
-                <div class="value">320万元</div>
+                <h4>项目收入</h4>
+                <div class="value">3560万元</div>
             </div>
             <div class="summary-card">
                 <h4>人员投入</h4>
@@ -152,20 +152,20 @@
             }]
         });
 
-        // 投入构成图表
+        // 项目收入构成图表
         const investmentChart = echarts.init(document.getElementById('investmentChart'));
         investmentChart.setOption({
             tooltip: { trigger: 'item', formatter: '{b}: {c}万元 ({d}%)' },
             legend: { bottom: '5%' },
             series: [{
-                name: '投入构成',
+                name: '收入构成',
                 type: 'pie',
                 radius: '60%',
                 data: [
-                    {value: 150, name: '人力成本', itemStyle: {color: '#5470c6'}},
-                    {value: 80, name: '设备采购', itemStyle: {color: '#91cc75'}},
-                    {value: 50, name: '技术外包', itemStyle: {color: '#fac858'}},
-                    {value: 40, name: '其他支出', itemStyle: {color: '#ee6666'}}
+                    {value: 1800, name: '产品销售', itemStyle: {color: '#5470c6'}},
+                    {value: 1000, name: '技术服务', itemStyle: {color: '#91cc75'}},
+                    {value: 560, name: '咨询服务', itemStyle: {color: '#fac858'}},
+                    {value: 200, name: '其他收入', itemStyle: {color: '#ee6666'}}
                 ],
                 emphasis: {
                     itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
