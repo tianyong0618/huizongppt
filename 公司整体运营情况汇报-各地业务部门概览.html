@@ -75,6 +75,33 @@
             width: 100%;
             height: 400px;
         }
+        
+        .chart-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-btn {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover {
+            color: #2a5298;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #2a5298;
+            border-bottom: 3px solid #2a5298;
+        }
     </style>
 </head>
 <body>
@@ -94,6 +121,11 @@
             <!-- 公司列表 -->
             <div class="chart-section">
                 <h2>公司列表</h2>
+                <div class="chart-tabs">
+                    <button class="tab-btn active" data-type="revenue">收入</button>
+                    <button class="tab-btn" data-type="cost">成本</button>
+                    <button class="tab-btn" data-type="people">人数</button>
+                </div>
                 <div id="companyList" class="chart"></div>
             </div>
         </div>
@@ -140,44 +172,103 @@
             window.location.href = '公司整体运营情况汇报-业务管理分析.html';
         });
 
-        // 公司列表
-        const companyList = echarts.init(document.getElementById('companyList'));
+        // 公司列表数据
         const companyListData = [
-            {name: '总部', value: 100, employees: 500, revenue: 5000000},
-            {name: '北京分公司', value: 95, employees: 120, revenue: 1200000},
-            {name: '上海分公司', value: 92, employees: 100, revenue: 1000000},
-            {name: '广州分公司', value: 88, employees: 90, revenue: 900000},
-            {name: '深圳分公司', value: 85, employees: 80, revenue: 800000},
-            {name: '成都分公司', value: 82, employees: 70, revenue: 700000},
-            {name: '武汉分公司', value: 78, employees: 60, revenue: 600000},
-            {name: '西安分公司', value: 75, employees: 50, revenue: 500000},
-            {name: '南京分公司', value: 72, employees: 45, revenue: 450000},
-            {name: '重庆分公司', value: 70, employees: 40, revenue: 400000}
+            {name: '总部', value: 100, employees: 500, revenue: 5000000, cost: 3000000},
+            {name: '北京分公司', value: 95, employees: 120, revenue: 1200000, cost: 720000},
+            {name: '上海分公司', value: 92, employees: 100, revenue: 1000000, cost: 600000},
+            {name: '广州分公司', value: 88, employees: 90, revenue: 900000, cost: 540000},
+            {name: '深圳分公司', value: 85, employees: 80, revenue: 800000, cost: 480000},
+            {name: '成都分公司', value: 82, employees: 70, revenue: 700000, cost: 420000},
+            {name: '武汉分公司', value: 78, employees: 60, revenue: 600000, cost: 360000},
+            {name: '西安分公司', value: 75, employees: 50, revenue: 500000, cost: 300000},
+            {name: '南京分公司', value: 72, employees: 45, revenue: 450000, cost: 270000},
+            {name: '重庆分公司', value: 70, employees: 40, revenue: 400000, cost: 240000}
         ];
         
-        companyList.setOption({
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            },
-            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-            xAxis: { type: 'value' },
-            yAxis: {
-                type: 'category',
-                data: companyListData.map(item => item.name)
-            },
-            series: [{
-                name: '业务活跃度',
-                type: 'bar',
-                data: companyListData.map(item => item.value),
-                itemStyle: {
-                    color: function(params) {
-                        const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#60c0dd'];
-                        return colors[params.dataIndex % colors.length];
+        // 公司列表图表
+        const companyList = echarts.init(document.getElementById('companyList'));
+        
+        function updateCompanyList(type) {
+            let dataKey, name, unit, max;
+            
+            switch(type) {
+                case 'revenue':
+                    dataKey = 'revenue';
+                    name = '收入';
+                    unit = '万元';
+                    max = 5500000;
+                    break;
+                case 'cost':
+                    dataKey = 'cost';
+                    name = '成本';
+                    unit = '万元';
+                    max = 3500000;
+                    break;
+                case 'people':
+                    dataKey = 'employees';
+                    name = '人数';
+                    unit = '人';
+                    max = 550;
+                    break;
+            }
+            
+            companyList.setOption({
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    formatter: function(params) {
+                        return params[0].name + ': ' + (params[0].value / (type === 'revenue' || type === 'cost' ? 10000 : 1)) + unit;
                     }
                 },
-                label: { show: true, position: 'right' }
-            }]
+                grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                xAxis: { 
+                    type: 'value',
+                    max: max,
+                    axisLabel: {
+                        formatter: function(value) {
+                            return (value / (type === 'revenue' || type === 'cost' ? 10000 : 1)) + unit;
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: companyListData.map(item => item.name)
+                },
+                series: [{
+                    name: name,
+                    type: 'bar',
+                    data: companyListData.map(item => item[dataKey]),
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#60c0dd'];
+                            return colors[params.dataIndex % colors.length];
+                        }
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        formatter: function(params) {
+                            return (params.value / (type === 'revenue' || type === 'cost' ? 10000 : 1)) + unit;
+                        }
+                    }
+                }]
+            });
+        }
+        
+        // 初始化图表
+        updateCompanyList('revenue');
+        
+        // 标签点击事件
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有标签的active类
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                // 添加当前标签的active类
+                this.classList.add('active');
+                // 更新图表数据
+                updateCompanyList(this.dataset.type);
+            });
         });
         
         // 添加点击事件，跳转到业务管理分析页面（作为各公司业务明细页）
