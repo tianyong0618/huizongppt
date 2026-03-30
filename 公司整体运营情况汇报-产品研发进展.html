@@ -152,90 +152,66 @@
             }]
         });
 
-        // 技术支持项目表格
-        const investmentChartDiv = document.getElementById('investmentChart');
-        investmentChartDiv.innerHTML = `
-            <div style="overflow-x: auto; max-height: 350px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                    <thead>
-                        <tr style="background-color: #2a5298; color: white;">
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">序号</th>
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目名称</th>
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">具体支持措施</th>
-                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目阶段</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">1</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">银川项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目方案支持、初设支持、项目投标</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">招投标</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">2</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">龙岩项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目方案支持，投标技术方案等</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">初步设计</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">3</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">昌平项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">投标技术方案、协助项目落地和合同签订</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目交付</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">4</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">大同项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">参与项目可研、初步设计，投标技术方案等</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">初步设计</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">5</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">海东项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目方案支持，投标技术方案等</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">初步设计</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">6</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">喀什项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">喀什赋能中心、喀创通等项目方案支持</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">方案支持</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">7</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">上海项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">上海赋能中心项目信息化部分方案支持</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">方案支持</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">8</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">赤峰项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">参与项目可研、初步设计，投标技术方案等</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">初步设计</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">9</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">黄石项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">项目方案支持、初设支持、项目投标</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">初步设计</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">10</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">昆明项目</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">昆明赋能中心项目信息化部分方案支持</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">方案支持</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
+        // 技术支持项目收入图表
+        const investmentChart = echarts.init(document.getElementById('investmentChart'));
+        investmentChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                formatter: function(params) {
+                    return params[0].name + '<br/>收入: ' + params[0].value + ' 万元';
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ['银川项目', '龙岩项目', '昌平项目', '大同项目', '海东项目', '喀什项目', '上海项目', '赤峰项目', '黄石项目', '昆明项目'],
+                axisLabel: {
+                    fontSize: 10,
+                    interval: 0,
+                    rotate: 45
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '收入（万元）',
+                axisLabel: {
+                    fontSize: 12
+                }
+            },
+            series: [{
+                name: '项目收入',
+                type: 'bar',
+                data: [1250, 980, 1560, 890, 1120, 750, 1890, 920, 1350, 1080],
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        {offset: 0, color: '#667eea'},
+                        {offset: 1, color: '#764ba2'}
+                    ]),
+                    borderRadius: [4, 4, 0, 0]
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c} 万',
+                    fontSize: 10
+                }
+            }]
+        });
 
 
 
         window.addEventListener('resize', function() {
             projectChart.resize();
             productChart.resize();
+            investmentChart.resize();
         });
     </script>
 </body>
